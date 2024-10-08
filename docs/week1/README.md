@@ -1368,7 +1368,10 @@ Empty set (0.00 sec)
     9 rows in set (0.01 sec)
     ```
 ❗주의❗<br>
-CREATE 권한만 부여한 경우 INDEX, 제약 조건 등의 의하여 필수 테이블이 누락되어 생성됨
+CREATE 권한만 부여한 경우 INDEX, 제약 조건 등의 의하여 필수 테이블이 누락되어 생성됨 <br>
+실 사용시에는 자동 생성 기능 사용하지 않음 <br>
+각 테이블 생성 쿼리는  spring batch 공식 깃허브에 작성되어 있음 <br>
+example - https://github.com/spring-projects/spring-batch/blob/main/spring-batch-core/src/main/resources/org/springframework/batch/core/schema-mysql.sql
 
 ### 1주차 WrapUp
 
