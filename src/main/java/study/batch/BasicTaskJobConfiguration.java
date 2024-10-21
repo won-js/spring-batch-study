@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import study.batch.jobs.task01.GreetingTask;
 import study.batch.jobs.task01.GreetingTaskExceptionThrower;
 
 import javax.sql.DataSource;
@@ -25,11 +26,6 @@ public class BasicTaskJobConfiguration {
     @Autowired
     DataSource dataSource;
 
-//    @Bean
-//    public DataSource dataSource() {
-//        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
-//    }
-
     @Bean
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource);
@@ -37,13 +33,12 @@ public class BasicTaskJobConfiguration {
 
     @Bean
     public Tasklet greetingTasklet() {
-        return new GreetingTaskExceptionThrower();
+        return new GreetingTask();
     }
 
     @Bean
     public Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         logger.info("------------------ Init myStep -----------------");
-
         return new StepBuilder("myStep", jobRepository)
                 .tasklet(greetingTasklet(), transactionManager)
                 .build();
