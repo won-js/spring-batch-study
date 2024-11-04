@@ -247,7 +247,7 @@ SqlParameterSource란?
 - 주요 구현체로는 MapSqlParameterSource / BeanPropertySqlParameterSource / EmptySqlParameterSource 가 있음
   - MapSqlParameterSource
     - 파라미터를 Map형태로 저장하여 사용
-    - 키-값을 사용해 파라미터를 추가할 수 있어 유연성이 높ㅇ므
+    - 키-값을 사용해 파라미터를 추가할 수 있어 유연성이 높음
     - ```
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", "Alice");
