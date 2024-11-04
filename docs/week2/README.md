@@ -135,7 +135,7 @@ public class BasicTaskJobConfiguration {
   - star(step)을 통해 job의 시작 포인트를 잡는다. 처음 시작하는 스텝은 우리가 파라미터로 받은 step을 등록
 
 ### 실행하기
-```java
+```
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
@@ -222,7 +222,7 @@ public class GreetingTask implements Tasklet, InitializingBean {
 ```
 
 **❗결과 확인❗** <br>
-```java
+```
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \

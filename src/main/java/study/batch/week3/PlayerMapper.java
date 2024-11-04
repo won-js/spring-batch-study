@@ -6,6 +6,7 @@ import org.springframework.batch.item.file.transform.FieldSet;
 
 @Log
 public class PlayerMapper implements FieldSetMapper<Player> {
+    @Override
     public Player mapFieldSet(FieldSet fs) {
         if (fs == null) return null;
 

@@ -8,7 +8,9 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
@@ -17,10 +19,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 
 @Log
 @Configuration
 public class PlayerJobConfiguration {
+    public static final String ENCODING = "UTF-8";
+    public static final String TOTAL_PLAYERS = "TOTAL_PLAYERS";
+    public static final String TOTAL_AGES = "TOTAL_AGES";
+
+    private final ConcurrentHashMap<String, Integer> aggregateInfos = new ConcurrentHashMap<>();
 
     @Bean
     public FieldSetMapper<Player> playerFieldSetMapper() {
@@ -55,6 +64,24 @@ public class PlayerJobConfiguration {
     }
 
     @Bean
+    public FlatFileItemWriter<Player> playerFlatFileItemWriter() {
+        return new FlatFileItemWriterBuilder<Player>()
+                .name("customerFlatFileItemWriter")
+                .resource(new FileSystemResource("./output/week3/player_new.csv"))
+                .encoding(ENCODING)
+                .delimited()
+                .names("No", "Name", "Age")
+                .append(false)
+                .headerCallback(writer -> writer.write("No,Name,Age"))
+                .footerCallback(writer -> {
+                    writer.write("총 플레이어 수: " + aggregateInfos.get(TOTAL_PLAYERS));
+                    writer.write(System.lineSeparator());
+                    writer.write("총 나이: " + aggregateInfos.get(TOTAL_AGES));
+                })
+                .build();
+    }
+
+    @Bean
     public Step playerStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         log.info("------------------ Init PlayerStep -----------------");
         return new StepBuilder("flatPlayerStep", jobRepository)
@@ -63,12 +90,14 @@ public class PlayerJobConfiguration {
                 .processor(player -> {
                     log.info("------------------ Processor Execute ------------------");
                     player.setAge(player.getAge()+1);
+                    aggregateInfos.putIfAbsent(TOTAL_PLAYERS, 0);
+                    aggregateInfos.putIfAbsent(TOTAL_AGES, 0);
+
+                    aggregateInfos.put(TOTAL_PLAYERS, aggregateInfos.get(TOTAL_PLAYERS) + 1);
+                    aggregateInfos.put(TOTAL_AGES, aggregateInfos.get(TOTAL_AGES) + player.getAge());
                     return player;
                 })
-                .writer(chunk -> {
-                    log.info("------------------ WRITE Execute ------------------");
-                    chunk.getItems().forEach(item -> log.info(item.toString()));
-                })
+                .writer(playerFlatFileItemWriter())
                 .build();
     }
 
