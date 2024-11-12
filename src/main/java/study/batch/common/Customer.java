@@ -1,16 +1,23 @@
 package study.batch.common;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
+@Entity(name = "CUSTOMER")
+@Table(name="CUSTOMER")
 public class Customer {
+    @Id
+    @Column(name="ID")
     private  int id;
+    @Column(name="NAME")
     private String name;
+    @Column(name = "AGE")
     private int age;
+    @Enumerated(EnumType.STRING)
+    @Column(name="GRADE")
     private Grade grade;
 
     public enum Grade {
@@ -19,6 +26,10 @@ public class Customer {
 
     public String getGrade() {
         return grade.toString();
+    }
+
+    public void addOneAge() {
+        age++;
     }
 
     public void assignGroup() {
