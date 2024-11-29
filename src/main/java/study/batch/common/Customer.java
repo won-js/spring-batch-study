@@ -21,7 +21,7 @@ public class Customer {
     private Grade grade;
 
     public enum Grade {
-        A, B, C, D
+        S, A, B, C, D
     }
 
     public String getGrade() {
@@ -42,5 +42,13 @@ public class Customer {
         } else {
             grade = Grade.D;
         }
+    }
+
+    public void nameToLowerCase() {
+        name = name.toLowerCase();
+    }
+
+    public void after20Years () {
+        age += 20;
     }
 }
