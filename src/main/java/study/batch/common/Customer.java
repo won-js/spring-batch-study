@@ -24,10 +24,6 @@ public class Customer {
         S, A, B, C, D
     }
 
-    public String getGrade() {
-        return grade.toString();
-    }
-
     public void addOneAge() {
         age++;
     }

@@ -21,14 +21,14 @@ import study.batch.common.Customer;
 import java.util.Collections;
 
 @Log
-@Configuration
+//@Configuration
 public class CustomerJpaJobConfiguration {
     private static final int CHUNK_SIZE = 10;
     private static final String JPA_PAGING_JOB = "JpaPagingJob";
     private static final String JPA_PAGING_STEP = "JpaPagingStep";
     private static final String JPA_PAGING_ITEM_READER = "JpaPagingItemReader";
 
-    @Autowired
+//    @Autowired
     EntityManagerFactory entityManagerFactory;
 
     @Bean
